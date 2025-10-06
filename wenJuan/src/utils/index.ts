@@ -1,7 +1,8 @@
-import type { TextProps, OptionsProps, MaterialComStatus } from '@/types';
+import type { TextProps, OptionsProps, MaterialComStatus, SurveyDBData } from '@/types';
 import { isStringArray, isPicTitleDescArray } from '@/types';
 import { IsOptionsStatus } from '@/types';
 import { genderStatus, educationStatus } from '@/configs/defaultStatus/initStatus';
+import type { TableColumnCtx } from 'element-plus';
 
 export function getTextStatus(props: TextProps) {
   // // 防御性检查：确保props和status存在
@@ -43,4 +44,21 @@ export function updateInitStatusBeforeAdd(comStatus: MaterialComStatus, newMater
       break;
     }
   }
+}
+
+// 处理日期格式的辅助方法
+export function formatDate(
+  row: SurveyDBData,
+  column: TableColumnCtx<SurveyDBData>,
+  cellValue: number,
+) {
+  const options: Intl.DateTimeFormatOptions = {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+  };
+  return new Intl.DateTimeFormat('zh-CN', options).format(new Date(cellValue));
 }

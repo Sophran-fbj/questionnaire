@@ -4,3 +4,4 @@ export * from './material';
 export * from './eventBus';
 export * from './editActions';
 export * from './configKeys';
+export * from './db';

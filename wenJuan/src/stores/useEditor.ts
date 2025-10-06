@@ -1,13 +1,14 @@
 import { defineStore } from 'pinia';
 import defaultStatusMap from '@/configs/defaultStatus/DefaultStatusMap';
-import type { MaterialComStatus, TextConfigKey, OptionsConfigKey } from '@/types';
+import type { MaterialComStatus, TextConfigKey, OptionsConfigKey, tn, SurveyDBData } from '@/types';
 import { updateInitStatusBeforeAdd } from '@/utils';
 import { isSurveyComName } from '../types';
 import * as EditUtils from '@/utils/editActions';
+import textNoteDefaultStatus from '@/configs/defaultStatus/TextNote';
+import { saveSurvey } from '@/database/operation';
+
 const keyToInit = ['personal-info-gender', 'personal-info-education'];
-
 const initializedStates: { [key: string]: MaterialComStatus } = {};
-
 keyToInit.forEach((key) => {
   const defaultStatus = defaultStatusMap[
     key as keyof typeof defaultStatusMap
@@ -16,11 +17,24 @@ keyToInit.forEach((key) => {
   initializedStates[key] = defaultStatus;
 });
 
+const initStatus = () => {
+  const initComs = [];
+  const com1 =  Object.assign({}, textNoteDefaultStatus()) as tn;
+  com1.status.title.status = '问卷标题';
+  com1.status.type.currentIndex = 0;
+  com1.status.titleWeight.currentIndex = 0;
+  const com2 = Object.assign({}, textNoteDefaultStatus()) as tn;
+  com2.status.desc.status = '为了给您提供更好的服务，希望您能抽出几分钟时间，将您的感受和建议告诉我们，我们非常重视每位用户的宝贵意见，期待您的参与！现在我们就马上开始吧！';
+  initComs.push(com1);
+  initComs.push(com2);
+  return initComs;
+};
+
 export const useEditorStore = defineStore('editor', {
   state: () => ({
     currentComponentIndex: -1, // 当前选中的组件索引，一开始都没有选中，所以是-1
     surveyCount: 0, // 问卷题目的数量
-    coms: [] as MaterialComStatus[], // 问卷题目的数组
+    coms: initStatus() as MaterialComStatus[], // 问卷题目的数组
   }),
   actions: {
     addCom(newCom: MaterialComStatus) {
@@ -35,6 +49,14 @@ export const useEditorStore = defineStore('editor', {
       if (isSurveyComName(this.coms[index].name)) this.surveyCount--;
       this.coms.splice(index, 1);
       this.currentComponentIndex = -1;
+    },
+    resetComs() {
+      this.coms = initStatus();
+      this.surveyCount = 0;
+      this.currentComponentIndex = -1;
+    },
+    saveComs(data: SurveyDBData) {
+      return saveSurvey(data);
     },
     // 获取当前选中的组件（辅助方法）
     getCurrentComponent() {
