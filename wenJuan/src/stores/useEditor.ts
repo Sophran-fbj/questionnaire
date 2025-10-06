@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import defaultStatusMap from '@/configs/defaultStatus/DefaultStatusMap';
-import type { MaterialComStatus } from '@/types';
+import type { MaterialComStatus, TextConfigKey, OptionsConfigKey } from '@/types';
 import { updateInitStatusBeforeAdd } from '@/utils';
 import { isSurveyComName } from '../types';
 import * as EditUtils from '@/utils/editActions';
@@ -45,31 +45,31 @@ export const useEditorStore = defineStore('editor', {
     },
 
     // 更新文本状态 (title, desc, titleColor, descColor)
-    updateTextStatus(configKey: string, payload: string) {
+    updateTextStatus(configKey: TextConfigKey, payload: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updateTextStatus(currentComData, configKey, payload);
     },
     
     // 🔥 扩展：添加选项（兼容不同类型）
-    addOption(configKey: string, newOption?: string) {
+    addOption(configKey: OptionsConfigKey, newOption?: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.addOption(currentComData, configKey, newOption);
     },
     
     // 🔥 扩展：删除选项（兼容不同类型）
-    removeOption(configKey: string, index: number) {
+    removeOption(configKey: OptionsConfigKey, index: number) {
       const currentComData = this.getCurrentComponent();
       return EditUtils.removeOption(currentComData, configKey, index);
     },
     
     // 🔥 扩展：更新单个选项（兼容不同类型）
-    updateSingleOption(configKey: string, index: number, value: string) {
+    updateSingleOption(configKey: OptionsConfigKey, index: number, value: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updateSingleOption(currentComData, configKey, index, value);
     },
 
     //更新currentIndex
-    updateCurrentIndex(configKey: string, index: number) {
+    updateCurrentIndex(configKey: OptionsConfigKey, index: number) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updateCurrentIndex(currentComData, configKey, index, (typeIndex) => {
         this.toggleTitleDescShow(typeIndex);
@@ -78,25 +78,25 @@ export const useEditorStore = defineStore('editor', {
 
     // 🔥 图片相关的专门方法
     //更新图片链接
-    updatePicStatus(configKey: string, index: number, value: string) {
+    updatePicStatus(configKey: 'options', index: number, value: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updatePicStatus(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：更新图片标题
-    updatePicTitle(configKey: string, index: number, value: string) {
+    updatePicTitle(configKey: 'options', index: number, value: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updatePicTitle(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：更新图片描述
-    updatePicDesc(configKey: string, index: number, value: string) {
+    updatePicDesc(configKey: 'options', index: number, value: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updatePicDesc(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：删除图片
-    deletePicImage(configKey: string, index: number) {
+    deletePicImage(configKey: 'options', index: number) {
       const currentComData = this.getCurrentComponent();
       EditUtils.deletePicImage(currentComData, configKey, index);
     },

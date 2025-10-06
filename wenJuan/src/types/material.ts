@@ -26,3 +26,4 @@ export const SurveyComNameArr = [
 export function isSurveyComName(value: string): value is SurveyComName {
   return SurveyComNameArr.includes(value as SurveyComName);
 }
+

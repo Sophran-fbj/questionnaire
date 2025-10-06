@@ -10,8 +10,9 @@ import ColorEditor from '@/components/SurveyComs/EditItems/ColorEditor.vue';
 import TextTypeEditor from '@/components/SurveyComs/EditItems/TextTypeEditor.vue';
 import { markRaw } from 'vue';
 import { v4 as uuidv4 } from 'uuid';
+import type { MaterialComStatus } from '@/types';
 
-export default function () {
+export default function (): MaterialComStatus {
   return {
     type: markRaw(TextNote),
     name: 'text-note',

@@ -4,8 +4,11 @@
 import type { 
   MaterialComStatus, 
   OptionsProps, 
+  TextProps,
   StringStatusArr, 
-  PicTitleDescStatusArr 
+  PicTitleDescStatusArr,
+  TextConfigKey,
+  OptionsConfigKey
 } from '@/types';
 
 /**
@@ -13,7 +16,7 @@ import type {
  */
 export function updateTextStatus(
   currentComData: MaterialComStatus | null, 
-  configKey: string, 
+  configKey: TextConfigKey, 
   payload: string
 ): void {
   if (currentComData) {
@@ -26,12 +29,15 @@ export function updateTextStatus(
  */
 export function addOption(
   currentComData: MaterialComStatus | null,
-  configKey: string,
+  configKey: OptionsConfigKey,
   newOption?: string
 ): void {
   if (!currentComData) return;
   
-  const prop = (currentComData.status as any)[configKey] as OptionsProps;
+  const statusObj = currentComData.status;
+  if (!(configKey in statusObj)) return;
+  
+  const prop = statusObj[configKey as keyof typeof statusObj] as OptionsProps;
   
   if (Array.isArray(prop.status)) {
     // 判断选项类型并添加对应的默认选项
@@ -64,14 +70,19 @@ export function addOption(
  */
 export function removeOption(
   currentComData: MaterialComStatus | null,
-  configKey: string,
+  configKey: OptionsConfigKey,
   index: number
 ): { success: boolean; message: string } {
   if (!currentComData) {
     return { success: false, message: '未选中组件' };
   }
   
-  const prop = (currentComData.status as any)[configKey] as OptionsProps;
+  const statusObj = currentComData.status;
+  if (!(configKey in statusObj)) {
+    return { success: false, message: '配置键不存在' };
+  }
+  
+  const prop = statusObj[configKey as keyof typeof statusObj] as OptionsProps;
   
   if (Array.isArray(prop.status) && prop.status.length > 2) {
     prop.status.splice(index, 1);
@@ -92,13 +103,16 @@ export function removeOption(
  */
 export function updateSingleOption(
   currentComData: MaterialComStatus | null,
-  configKey: string,
+  configKey: OptionsConfigKey,
   index: number,
   value: string
 ): void {
   if (!currentComData) return;
   
-  const prop = (currentComData.status as any)[configKey] as OptionsProps;
+  const statusObj = currentComData.status;
+  if (!(configKey in statusObj)) return;
+  
+  const prop = statusObj[configKey as keyof typeof statusObj] as OptionsProps;
   
   if (Array.isArray(prop.status) && prop.status[index]) {
     const item = prop.status[index];
@@ -119,13 +133,16 @@ export function updateSingleOption(
  */
 export function updateCurrentIndex(
   currentComData: MaterialComStatus | null,
-  configKey: string,
+  configKey: OptionsConfigKey,
   index: number,
   onTextNoteTypeChange?: (typeIndex: number) => void
 ): void {
   if (!currentComData) return;
   
-  const prop = (currentComData.status as any)[configKey] as OptionsProps;
+  const statusObj = currentComData.status;
+  if (!(configKey in statusObj)) return;
+  
+  const prop = statusObj[configKey as keyof typeof statusObj] as OptionsProps;
   prop.currentIndex = index;
   
   // 🔥 特殊处理：如果是 text-note 组件的 type 切换
@@ -139,14 +156,20 @@ export function updateCurrentIndex(
  */
 export function updatePicStatus(
   currentComData: MaterialComStatus | null,
-  configKey: string,
+  configKey: 'options',
   index: number,
   value: string
 ): void {
   if (!currentComData) return;
   
-  const prop = (currentComData.status as any)[configKey] as OptionsProps;
-  (prop.status as PicTitleDescStatusArr)[index].value = value;
+  const statusObj = currentComData.status;
+  if (!(configKey in statusObj)) return;
+  
+  const prop = statusObj[configKey as keyof typeof statusObj] as OptionsProps;
+  const status = prop.status as PicTitleDescStatusArr;
+  if (status[index]) {
+    status[index].value = value;
+  }
 }
 
 /**
@@ -154,14 +177,20 @@ export function updatePicStatus(
  */
 export function updatePicTitle(
   currentComData: MaterialComStatus | null,
-  configKey: string,
+  configKey: 'options',
   index: number,
   value: string
 ): void {
   if (!currentComData) return;
   
-  const prop = (currentComData.status as any)[configKey] as OptionsProps;
-  (prop.status as PicTitleDescStatusArr)[index].picTitle = value;
+  const statusObj = currentComData.status;
+  if (!(configKey in statusObj)) return;
+  
+  const prop = statusObj[configKey as keyof typeof statusObj] as OptionsProps;
+  const status = prop.status as PicTitleDescStatusArr;
+  if (status[index]) {
+    status[index].picTitle = value;
+  }
 }
 
 /**
@@ -169,14 +198,20 @@ export function updatePicTitle(
  */
 export function updatePicDesc(
   currentComData: MaterialComStatus | null,
-  configKey: string,
+  configKey: 'options',
   index: number,
   value: string
 ): void {
   if (!currentComData) return;
   
-  const prop = (currentComData.status as any)[configKey] as OptionsProps;
-  (prop.status as PicTitleDescStatusArr)[index].picDesc = value;
+  const statusObj = currentComData.status;
+  if (!(configKey in statusObj)) return;
+  
+  const prop = statusObj[configKey as keyof typeof statusObj] as OptionsProps;
+  const status = prop.status as PicTitleDescStatusArr;
+  if (status[index]) {
+    status[index].picDesc = value;
+  }
 }
 
 /**
@@ -184,13 +219,19 @@ export function updatePicDesc(
  */
 export function deletePicImage(
   currentComData: MaterialComStatus | null,
-  configKey: string,
+  configKey: 'options',
   index: number
 ): void {
   if (!currentComData) return;
   
-  const prop = (currentComData.status as any)[configKey] as OptionsProps;
-  (prop.status as PicTitleDescStatusArr)[index].value = '';
+  const statusObj = currentComData.status;
+  if (!(configKey in statusObj)) return;
+  
+  const prop = statusObj[configKey as keyof typeof statusObj] as OptionsProps;
+  const status = prop.status as PicTitleDescStatusArr;
+  if (status[index]) {
+    status[index].value = '';
+  }
 }
 
 /**
