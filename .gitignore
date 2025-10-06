@@ -1,0 +1,40 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+
+# 上传的文件
+server/uploads/
+
+# Build outputs
+dist/
+dist-ssr/
+*.tsbuildinfo
+
+# 系统文件
+.DS_Store
+*.log
+*.local
+
+# IDE
+.vscode/*
+!.vscode/extensions.json
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 测试覆盖率
+coverage/
+
+# Cypress
+/cypress/videos/
+/cypress/screenshots/
+
+# 注释文件
+类型.md
