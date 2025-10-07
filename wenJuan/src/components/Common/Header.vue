@@ -139,24 +139,14 @@ const gotoPreview = async () => {
 };
 
 const updateSurvey = () => {
-  ElMessageBox.confirm('是否确定更新问卷', '提示', {
-    confirmButtonText: '确定',
-    cancelButtonText: '取消',
-    type: 'warning',
-  })
-    .then(() => {
-      store
-        .updateComs(Number(props.id), {
-          updateDate: new Date().getTime(),
-          surveyCount: store.surveyCount,
-          coms: JSON.parse(JSON.stringify(store.coms)),
-        })
-        .then(() => {
-          ElMessage.success('问卷已更新');
-        });
+  store
+    .updateComs(Number(props.id), {
+      updateDate: new Date().getTime(),
+      surveyCount: store.surveyCount,
+      coms: JSON.parse(JSON.stringify(store.coms)),
     })
-    .catch(() => {
-      ElMessage.info('已取消更新');
+    .then(() => {
+      ElMessage.success('问卷已更新');
     });
 };
 </script>

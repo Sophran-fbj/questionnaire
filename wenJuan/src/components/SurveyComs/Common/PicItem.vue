@@ -10,11 +10,12 @@
           :show-file-list="false"
           :on-success="handleAvatarSuccess"
           :before-upload="beforeAvatarUpload"
+          :disabled="isPreviewMode"
         >
           <img v-if="imageUrl" :src="imageUrl" class="avatar" />
           <div v-else>
             <el-icon><Upload /></el-icon>
-            添加图片
+            {{ isPreviewMode ? '预览模式' : '添加图片' }}
           </div>
         </el-upload>
       </div>
@@ -30,12 +31,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, inject } from 'vue';
+import { inject, computed } from 'vue';
 import { Upload } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import type { EditActionsInterface } from '@/types/editActions';
 import { EDIT_ACTIONS_KEY, createEmptyEditActions } from '@/types/editActions';
 import type { UploadProps } from 'element-plus';
+import { useEditorStore } from '@/stores/useEditor';
 
 const props = defineProps<{
   picTitle: string;
@@ -45,15 +47,19 @@ const props = defineProps<{
 }>();
 
 const editActions = inject<EditActionsInterface>(EDIT_ACTIONS_KEY, createEmptyEditActions());
-const imageUrl = ref(props.value);
+// 🔥 注入组件索引（由 Center.vue 提供）
+const componentIndex = inject<number>('componentIndex', -1);
+// 🔥 判断是否为预览模式
+const isPreviewMode = computed(() => componentIndex === -1);
 
-watch(() => props.value, (newVal) => {
-  imageUrl.value = newVal;
-});
+const editorStore = useEditorStore();
+const imageUrl = computed(() => props.value);
 
 const handleAvatarSuccess = async (response: any) => {
-  console.log('上传响应:', response); // 🔥 添加这行调试
-  console.log('图片URL:', response.imageUrl); // 🔥 添加这行调试
+  // 🔥 上传前先选中当前组件
+  if (componentIndex >= 0 && editorStore.currentComponentIndex !== componentIndex) {
+    editorStore.setCurrentComponentIndex(componentIndex);
+  }
   editActions?.updatePicStatus('options', props.index, response.imageUrl);
 };
 

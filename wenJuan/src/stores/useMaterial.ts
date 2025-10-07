@@ -71,25 +71,25 @@ export const useMaterialStore = defineStore('material', {
 
     // 🔥 图片相关的专门方法
     //更新图片链接
-    updatePicStatus(configKey: 'options', index: number, value: string) {
+    updatePicStatus(configKey: OptionsConfigKey, index: number, value: string) {
       const currentComData = this.coms[this.currentCom];
       EditUtils.updatePicStatus(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：更新图片标题
-    updatePicTitle(configKey: 'options', index: number, value: string) {
+    updatePicTitle(configKey: OptionsConfigKey, index: number, value: string) {
       const currentComData = this.coms[this.currentCom];
       EditUtils.updatePicTitle(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：更新图片描述
-    updatePicDesc(configKey: 'options', index: number, value: string) {
+    updatePicDesc(configKey: OptionsConfigKey, index: number, value: string) {
       const currentComData = this.coms[this.currentCom];
       EditUtils.updatePicDesc(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：删除图片
-    deletePicImage(configKey: 'options', index: number) {
+    deletePicImage(configKey: OptionsConfigKey, index: number) {
       const currentComData = this.coms[this.currentCom];
       EditUtils.deletePicImage(currentComData, configKey, index);
     },

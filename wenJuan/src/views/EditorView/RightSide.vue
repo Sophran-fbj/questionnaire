@@ -13,55 +13,11 @@
 </template>
 
 <script setup lang="ts">
-import { provide } from 'vue';
 import EditPannel from '@/components/SurveyComs/EditItems/EditorPanel.vue';
 import { useEditorStore } from '@/stores/useEditor';
-import type { EditActionsInterface, TextConfigKey, OptionsConfigKey } from '@/types';
-import { EDIT_ACTIONS_KEY } from '@/types';
 
 const editorStore = useEditorStore();
 
-// 实现EditActions接口 - EditorStore版本
-const editActions: EditActionsInterface = {
-  updateTextStatus: (configKey: TextConfigKey, payload: string) => {
-    editorStore.updateTextStatus(configKey, payload);
-  },
-  
-  addOption: (configKey: OptionsConfigKey, newOption?: string) => {
-    editorStore.addOption(configKey, newOption);
-  },
-  
-  removeOption: (configKey: OptionsConfigKey, index: number) => {
-    return editorStore.removeOption(configKey, index);
-  },
-  
-  updateSingleOption: (configKey: OptionsConfigKey, index: number, value: string) => {
-    editorStore.updateSingleOption(configKey, index, value);
-  },
-  
-  updateCurrentIndex: (configKey: OptionsConfigKey, index: number) => {
-    editorStore.updateCurrentIndex(configKey, index);
-  },
-  
-  updatePicStatus: (configKey: OptionsConfigKey, index: number, value: string) => {
-    editorStore.updatePicStatus(configKey, index, value);
-  },
-  
-  updatePicTitle: (configKey: OptionsConfigKey, index: number, value: string) => {
-    editorStore.updatePicTitle(configKey, index, value);
-  },
-  
-  updatePicDesc: (configKey: OptionsConfigKey, index: number, value: string) => {
-    editorStore.updatePicDesc(configKey, index, value);
-  },
-  
-  deletePicImage: (configKey: OptionsConfigKey, index: number) => {
-    editorStore.deletePicImage(configKey, index);
-  }
-};
-
-// 提供编辑操作接口
-provide(EDIT_ACTIONS_KEY, editActions);
 </script>
 
 <style scoped lang="scss">

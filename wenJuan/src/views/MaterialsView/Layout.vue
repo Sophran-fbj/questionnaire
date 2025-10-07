@@ -23,7 +23,7 @@
 import { computed, provide } from 'vue';
 import { useMaterialStore } from '@/stores/useMaterial';
 import EditorPanel from '@/components/SurveyComs/EditItems/EditorPanel.vue';
-import type { EditActionsInterface } from '@/types';
+import type { EditActionsInterface, TextConfigKey, OptionsConfigKey } from '@/types';
 import { EDIT_ACTIONS_KEY } from '@/types';
 
 const materialStore = useMaterialStore();
@@ -31,39 +31,39 @@ const currentCom = computed(() => materialStore.coms[materialStore.currentCom]);
 
 // 实现EditActions接口 - MaterialStore版本
 const editActions: EditActionsInterface = {
-  updateTextStatus: (configKey: string, payload: string) => {
+  updateTextStatus: (configKey: TextConfigKey, payload: string) => {
     materialStore.updateTextStatus(configKey, payload);
   },
   
-  addOption: (configKey: string, newOption?: string) => {
+  addOption: (configKey: OptionsConfigKey, newOption?: string) => {
     materialStore.addOption(configKey, newOption);
   },
   
-  removeOption: (configKey: string, index: number) => {
+  removeOption: (configKey: OptionsConfigKey, index: number) => {
     return materialStore.removeOption(configKey, index);
   },
   
-  updateSingleOption: (configKey: string, index: number, value: string) => {
+  updateSingleOption: (configKey: OptionsConfigKey, index: number, value: string) => {
     materialStore.updateSingleOption(configKey, index, value);
   },
   
-  updateCurrentIndex: (configKey: string, index: number) => {
+  updateCurrentIndex: (configKey: OptionsConfigKey, index: number) => {
     materialStore.updateCurrentIndex(configKey, index);
   },
   
-  updatePicStatus: (configKey: string, index: number, value: string) => {
+  updatePicStatus: (configKey: OptionsConfigKey, index: number, value: string) => {
     materialStore.updatePicStatus(configKey, index, value);
   },
   
-  updatePicTitle: (configKey: string, index: number, value: string) => {
+  updatePicTitle: (configKey: OptionsConfigKey, index: number, value: string) => {
     materialStore.updatePicTitle(configKey, index, value);
   },
   
-  updatePicDesc: (configKey: string, index: number, value: string) => {
+  updatePicDesc: (configKey: OptionsConfigKey, index: number, value: string) => {
     materialStore.updatePicDesc(configKey, index, value);
   },
   
-  deletePicImage: (configKey: string, index: number) => {
+  deletePicImage: (configKey: OptionsConfigKey, index: number) => {
     materialStore.deletePicImage(configKey, index);
   }
 };

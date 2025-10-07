@@ -2,34 +2,36 @@
   <div ref="centerContainer" class="center-container">
     <draggable v-model="editorStore.coms" itemKey="id" @start="dragStart">
       <template #item="{ element, index }">
-        <div
-          class="content mb-10 relative"
-          :class="{
-            active: editorStore.currentComponentIndex === index,
-          }"
-          @click="handleClick(index)"
-          :ref="(el) => (componentRefs[index] = el)"
-        >
-          <component :is="element.type" :status="element.status" :serialNum="serialNum[index]" />
-          <!-- 删除按钮 -->
-          <div class="absolute delete-btn" v-show="editorStore.currentComponentIndex === index">
-            <el-button
-              type="danger"
-              class="ml-10"
-              size="small"
-              :icon="Close"
-              circle
-              @click.stop="removeCom(index)"
-            />
+        <ComponentIndexProvider :index="index">
+          <div
+            class="content mb-10 relative"
+            :class="{
+              active: editorStore.currentComponentIndex === index,
+            }"
+            @click="handleClick(index)"
+            :ref="(el) => (componentRefs[index] = el)"
+          >
+            <component :is="element.type" :status="element.status" :serialNum="serialNum[index]" />
+            <!-- 删除按钮 -->
+            <div class="absolute delete-btn" v-show="editorStore.currentComponentIndex === index">
+              <el-button
+                type="danger"
+                class="ml-10"
+                size="small"
+                :icon="Close"
+                circle
+                @click.stop="removeCom(index)"
+              />
+            </div>
           </div>
-        </div>
+        </ComponentIndexProvider>
       </template>
     </draggable>
   </div>
 </template>
 <script setup lang="ts">
 import draggable from 'vuedraggable';
-import { ref, nextTick, computed, type ComponentPublicInstance } from 'vue';
+import { ref, nextTick, computed, type ComponentPublicInstance, defineComponent, provide } from 'vue';
 import { useEditorStore } from '@/stores/useEditor';
 import EventBus from '@/utils/eventBus';
 import { getSerialNumber } from '@/utils/hooks';
@@ -54,6 +56,17 @@ if (id.value) {
 }
 const serialNum = computed(() => getSerialNumber(editorStore.coms));
 const componentRefs = ref<(Element | ComponentPublicInstance | null)[]>([]);
+
+// 🔥 简单的包装组件：只提供组件索引
+const ComponentIndexProvider = defineComponent({
+  props: {
+    index: { type: Number, required: true },
+  },
+  setup(props, { slots }) {
+    provide('componentIndex', props.index);
+    return () => slots.default?.();
+  },
+});
 
 const handleClick = (index: number) => {
   if (editorStore.currentComponentIndex === index) {
