@@ -7,3 +7,8 @@ export interface SurveyDBData {
   surveyCount: number;
   coms: MaterialComStatus[];
 }
+
+export type QuizData = {
+  surveyCount: number;
+  coms: MaterialComStatus[];
+};

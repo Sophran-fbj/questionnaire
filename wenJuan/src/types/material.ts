@@ -27,3 +27,16 @@ export function isSurveyComName(value: string): value is SurveyComName {
   return SurveyComNameArr.includes(value as SurveyComName);
 }
 
+// 该数组记录适合生成PDF的题目类型
+export const PDFComs = [
+  'single-select',
+  'single-pic-select',
+  'personal-info-gender',
+  'personal-info-education',
+  'text-note',
+];
+
+// 判断组件是否能打印成PDF
+export function isPDFCom(value: string): boolean {
+  return PDFComs.includes(value as SurveyComName);
+}

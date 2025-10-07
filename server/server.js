@@ -6,6 +6,36 @@ const fs = require("fs");
 
 const app = express();
 
+// 设置 body-parser 选项，增加请求体大小限制
+app.use(bodyParser.json({ limit: "50mb" })); // 允许最大 50MB 的 JSON 请求体
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true })); // 允许最大 50MB 的 URL 编码请求体
+
+let quizzes = {}; // 存储问题
+let answers = {}; // 存储答案
+
+// 针对在线答题功能，提供3个新的接口
+// 存储问卷
+app.post("/api/saveQuiz", (req, res) => {
+  const { id, quizData } = req.body;
+  quizzes[id] = quizData;
+  res.status(200).send({ message: "Quiz saved" });
+});
+// 根据id获取问卷内容
+app.get("/api/getQuiz/:id", (req, res) => {
+  // 本来正常的逻辑，这里应该根据前端传递过来的问卷 id，从数据库来获取问卷内容，然后返回给前端
+  // 但是我们这是一个简化项目，没有数据库，使用的是 indexedDB 来存储的问卷数据
+  // 因此有了saveQuiz这个接口，我们可以直接从内存中获取问卷数据
+  const quizData = quizzes[req.params.id];
+  res.status(200).send(quizData);
+});
+// 存储答案
+app.post("/api/submitAnswers", (req, res) => {
+  const { quizId, answers: userAnswers } = req.body;
+  answers[quizId] = userAnswers;
+  console.table(answers);
+  res.status(200).send({ message: "Answers submitted" });
+});
+
 // 🔥 添加这行：配置静态资源访问
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
