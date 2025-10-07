@@ -1,8 +1,8 @@
 import type { TextProps, OptionsProps, MaterialComStatus, SurveyDBData } from '@/types';
-import { isStringArray, isPicTitleDescArray } from '@/types';
-import { IsOptionsStatus } from '@/types';
+import { isStringArray, isPicTitleDescArray, IsOptionsStatus, type BaseStatus } from '@/types';
 import { genderStatus, educationStatus } from '@/configs/defaultStatus/initStatus';
 import type { TableColumnCtx } from 'element-plus';
+import { componentMap } from '@/configs/componentMap';
 
 export function getTextStatus(props: TextProps) {
   // // 防御性检查：确保props和status存在
@@ -62,3 +62,22 @@ export function formatDate(
   };
   return new Intl.DateTimeFormat('zh-CN', options).format(new Date(cellValue));
 }
+
+//还原组件状态
+export function restoreComponentStatus(coms: MaterialComStatus[]) {
+  coms.forEach((com) => {
+    // 还原业务组件
+    com.type = componentMap[com.name as keyof typeof componentMap];
+    
+    // 还原编辑组件
+    const status = com.status as BaseStatus;
+    for (const key in status) {
+      const prop = status[key as keyof BaseStatus];
+      if (prop && typeof prop === 'object' && 'name' in prop) {
+        const editorName = prop.name as keyof typeof componentMap;
+        (prop as any).editCom = componentMap[editorName];
+      }
+    }
+  });
+}
+

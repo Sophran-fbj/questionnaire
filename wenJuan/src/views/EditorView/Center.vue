@@ -35,9 +35,23 @@ import EventBus from '@/utils/eventBus';
 import { getSerialNumber } from '@/utils/hooks';
 import { Close } from '@element-plus/icons-vue';
 import { ElMessage, ElMessageBox } from 'element-plus';
+import { useRoute } from 'vue-router';
+import { restoreComponentStatus } from '@/utils';
 
+const route = useRoute();
+const id = computed(() => (route.params.id ? String(route.params.id) : ''));
 const centerContainer = ref<HTMLElement | null>(null);
 const editorStore = useEditorStore();
+if (id.value) {
+  editorStore.getComsById(Number(id.value)).then((res) => {
+    if (res) {
+      restoreComponentStatus(res.coms);
+      editorStore.setComs(res);
+    }
+  });
+} else {
+  editorStore.resetComs();
+}
 const serialNum = computed(() => getSerialNumber(editorStore.coms));
 const componentRefs = ref<(Element | ComponentPublicInstance | null)[]>([]);
 
@@ -57,12 +71,14 @@ const removeCom = (index: number) => {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
-  }).then(() => {
-    editorStore.removeCom(index);
-    ElMessage.success('删除成功');
-  }).catch(() => {
-    ElMessage.warning('取消删除');
-  });
+  })
+    .then(() => {
+      editorStore.removeCom(index);
+      ElMessage.success('删除成功');
+    })
+    .catch(() => {
+      ElMessage.warning('取消删除');
+    });
 };
 const scrollToBottom = () => {
   nextTick(() => {
@@ -87,7 +103,7 @@ const scrollToCenter = (index: number) => {
 EventBus.on('scrollToBottom', scrollToBottom);
 EventBus.on('scrollToCenter', scrollToCenter);
 </script>
-<style scoped>
+<style scoped lang="scss">
 .center-container {
   width: 50%;
   border: 1px solid var(--border-color);

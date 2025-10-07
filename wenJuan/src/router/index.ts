@@ -1,7 +1,7 @@
+import HomeView from '@/views/HomeView.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 import { useMaterialStore } from '@/stores/useMaterial';
-
-import HomeView from '@/views/HomeView.vue';
+import type { Material } from '@/types';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,7 +12,7 @@ const router = createRouter({
       component: HomeView,
     },
     {
-      path: '/editor',
+      path: '/editor/:id(\\d+)?',
       name: 'editor',
       component: () => import('../views/EditorView/Index.vue'),
       children: [
@@ -122,6 +122,11 @@ const router = createRouter({
         },
       ],
     },
+    {
+      path: '/preview/:id(\\d+)',
+      name: 'preview',
+      component: () => import('../views/Preview.vue'),
+    },
   ],
 });
 
@@ -141,10 +146,10 @@ router.beforeEach((to, from, next) => {
       'personal-info-education',
     ];
 
-    if (selectComponents.includes(to.name as string)) {
+    if (selectComponents.includes(to.name as Material)) {
       // 🔥 路由名称到组件数据的映射
-      let comName = to.name as string;    
-      store.setCurrentSurveyCom(comName);
+      let comName = to.name;    
+      store.setCurrentSurveyCom(comName as Material);
     } else {
       console.log('切换到其他模块:', to.name);
     }

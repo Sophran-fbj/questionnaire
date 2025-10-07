@@ -23,12 +23,12 @@
 
 <script setup lang="ts">
 import { inject } from 'vue';
-import type { EditActionsInterface } from '@/types/editActions';
+import type { EditActionsInterface, OptionsConfigKey } from '@/types';
 import { EDIT_ACTIONS_KEY } from '@/types/editActions';
 import ButtonGroup from './ButtonGroup.vue';
 
 const props = defineProps<{
-  configKey: string;
+  configKey: OptionsConfigKey;
   status: string[];
   currentIndex: number;
 }>();

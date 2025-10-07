@@ -63,12 +63,12 @@
 import { inject } from 'vue';
 import { Plus, Minus } from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
-import type { EditActionsInterface } from '@/types/editActions';
-import { EDIT_ACTIONS_KEY } from '@/types/editActions';
+import type { EditActionsInterface, OptionsConfigKey } from '@/types';
+import { EDIT_ACTIONS_KEY } from '@/types';
 import type { PicTitleDescStatusArr } from '@/types';
 
 const props = defineProps<{
-  configKey: string;
+  configKey: OptionsConfigKey;
   status: PicTitleDescStatusArr;
 }>();
 

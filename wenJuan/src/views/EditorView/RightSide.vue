@@ -16,46 +16,46 @@
 import { provide } from 'vue';
 import EditPannel from '@/components/SurveyComs/EditItems/EditorPanel.vue';
 import { useEditorStore } from '@/stores/useEditor';
-import type { EditActionsInterface } from '@/types';
+import type { EditActionsInterface, TextConfigKey, OptionsConfigKey } from '@/types';
 import { EDIT_ACTIONS_KEY } from '@/types';
 
 const editorStore = useEditorStore();
 
 // 实现EditActions接口 - EditorStore版本
 const editActions: EditActionsInterface = {
-  updateTextStatus: (configKey: string, payload: string) => {
+  updateTextStatus: (configKey: TextConfigKey, payload: string) => {
     editorStore.updateTextStatus(configKey, payload);
   },
   
-  addOption: (configKey: string, newOption?: string) => {
+  addOption: (configKey: OptionsConfigKey, newOption?: string) => {
     editorStore.addOption(configKey, newOption);
   },
   
-  removeOption: (configKey: string, index: number) => {
+  removeOption: (configKey: OptionsConfigKey, index: number) => {
     return editorStore.removeOption(configKey, index);
   },
   
-  updateSingleOption: (configKey: string, index: number, value: string) => {
+  updateSingleOption: (configKey: OptionsConfigKey, index: number, value: string) => {
     editorStore.updateSingleOption(configKey, index, value);
   },
   
-  updateCurrentIndex: (configKey: string, index: number) => {
+  updateCurrentIndex: (configKey: OptionsConfigKey, index: number) => {
     editorStore.updateCurrentIndex(configKey, index);
   },
   
-  updatePicStatus: (configKey: string, index: number, value: string) => {
+  updatePicStatus: (configKey: OptionsConfigKey, index: number, value: string) => {
     editorStore.updatePicStatus(configKey, index, value);
   },
   
-  updatePicTitle: (configKey: string, index: number, value: string) => {
+  updatePicTitle: (configKey: OptionsConfigKey, index: number, value: string) => {
     editorStore.updatePicTitle(configKey, index, value);
   },
   
-  updatePicDesc: (configKey: string, index: number, value: string) => {
+  updatePicDesc: (configKey: OptionsConfigKey, index: number, value: string) => {
     editorStore.updatePicDesc(configKey, index, value);
   },
   
-  deletePicImage: (configKey: string, index: number) => {
+  deletePicImage: (configKey: OptionsConfigKey, index: number) => {
     editorStore.deletePicImage(configKey, index);
   }
 };

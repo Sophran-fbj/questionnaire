@@ -1,11 +1,11 @@
 import { defineStore } from 'pinia';
 import defaultStatusMap from '@/configs/defaultStatus/DefaultStatusMap';
-import type { MaterialComStatus, TextConfigKey, OptionsConfigKey, tn, SurveyDBData } from '@/types';
+import type { MaterialComStatus, TextConfigKey, OptionsConfigKey, SurveyDBData, tn } from '@/types';
 import { updateInitStatusBeforeAdd } from '@/utils';
 import { isSurveyComName } from '../types';
 import * as EditUtils from '@/utils/editActions';
 import textNoteDefaultStatus from '@/configs/defaultStatus/TextNote';
-import { saveSurvey } from '@/database/operation';
+import { getSurveyById, saveSurvey, updateSurveyById } from '@/database/operation';
 
 const keyToInit = ['personal-info-gender', 'personal-info-education'];
 const initializedStates: { [key: string]: MaterialComStatus } = {};
@@ -18,12 +18,12 @@ keyToInit.forEach((key) => {
 });
 
 const initStatus = () => {
-  const initComs = [];
-  const com1 =  Object.assign({}, textNoteDefaultStatus()) as tn;
+  const initComs: MaterialComStatus[] = [];
+  const com1 = textNoteDefaultStatus() as tn;
   com1.status.title.status = '问卷标题';
   com1.status.type.currentIndex = 0;
   com1.status.titleWeight.currentIndex = 0;
-  const com2 = Object.assign({}, textNoteDefaultStatus()) as tn;
+  const com2 = textNoteDefaultStatus() as tn;
   com2.status.desc.status = '为了给您提供更好的服务，希望您能抽出几分钟时间，将您的感受和建议告诉我们，我们非常重视每位用户的宝贵意见，期待您的参与！现在我们就马上开始吧！';
   initComs.push(com1);
   initComs.push(com2);
@@ -55,8 +55,20 @@ export const useEditorStore = defineStore('editor', {
       this.surveyCount = 0;
       this.currentComponentIndex = -1;
     },
+    setComs(data: SurveyDBData) {
+      this.coms = data.coms;
+      this.surveyCount = data.surveyCount;
+      this.currentComponentIndex = -1;
+    },
+    //数据库操作
     saveComs(data: SurveyDBData) {
       return saveSurvey(data);
+    },
+    updateComs(id: number, data: Partial<SurveyDBData>){
+      return updateSurveyById(id, data);
+    },
+    getComsById(id: number) {
+      return getSurveyById(id);
     },
     // 获取当前选中的组件（辅助方法）
     getCurrentComponent() {
@@ -100,25 +112,25 @@ export const useEditorStore = defineStore('editor', {
 
     // 🔥 图片相关的专门方法
     //更新图片链接
-    updatePicStatus(configKey: 'options', index: number, value: string) {
+    updatePicStatus(configKey: OptionsConfigKey, index: number, value: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updatePicStatus(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：更新图片标题
-    updatePicTitle(configKey: 'options', index: number, value: string) {
+    updatePicTitle(configKey: OptionsConfigKey, index: number, value: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updatePicTitle(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：更新图片描述
-    updatePicDesc(configKey: 'options', index: number, value: string) {
+    updatePicDesc(configKey: OptionsConfigKey, index: number, value: string) {
       const currentComData = this.getCurrentComponent();
       EditUtils.updatePicDesc(currentComData, configKey, index, value);
     },
     
     // 🔥 新增：删除图片
-    deletePicImage(configKey: 'options', index: number) {
+    deletePicImage(configKey: OptionsConfigKey, index: number) {
       const currentComData = this.getCurrentComponent();
       EditUtils.deletePicImage(currentComData, configKey, index);
     },

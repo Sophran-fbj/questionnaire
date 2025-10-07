@@ -156,7 +156,7 @@ export function updateCurrentIndex(
  */
 export function updatePicStatus(
   currentComData: MaterialComStatus | null,
-  configKey: 'options',
+  configKey: OptionsConfigKey,
   index: number,
   value: string
 ): void {
@@ -177,7 +177,7 @@ export function updatePicStatus(
  */
 export function updatePicTitle(
   currentComData: MaterialComStatus | null,
-  configKey: 'options',
+  configKey: OptionsConfigKey,
   index: number,
   value: string
 ): void {
@@ -198,7 +198,7 @@ export function updatePicTitle(
  */
 export function updatePicDesc(
   currentComData: MaterialComStatus | null,
-  configKey: 'options',
+  configKey: OptionsConfigKey,
   index: number,
   value: string
 ): void {
@@ -219,7 +219,7 @@ export function updatePicDesc(
  */
 export function deletePicImage(
   currentComData: MaterialComStatus | null,
-  configKey: 'options',
+  configKey: OptionsConfigKey,
   index: number
 ): void {
   if (!currentComData) return;

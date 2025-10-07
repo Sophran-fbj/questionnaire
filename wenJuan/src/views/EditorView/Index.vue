@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="header">
-      <Header :isEditor="true" />
+      <Header :isEditor="true" :id="id" />
     </div>
     <!-- 编辑器主体区域 -->
     <div class="container">
@@ -19,6 +19,10 @@ import Header from '@/components/Common/Header.vue';
 import LeftSide from '@/views/EditorView/LeftSide/Index.vue';
 import Center from '@/views/EditorView/Center.vue';
 import RightSide from '@/views/EditorView/RightSide.vue';
+import { useRoute } from 'vue-router';
+import { computed } from 'vue';
+const route = useRoute();
+const id = computed(() => route.params.id ? String(route.params.id) : '');
 </script>
 
 <style scoped lang="scss">

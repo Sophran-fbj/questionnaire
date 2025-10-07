@@ -9,19 +9,19 @@
 
 <script setup lang="ts">
 import { ref, inject } from 'vue';
-import type { EditActionsInterface } from '@/types/editActions';
-import { EDIT_ACTIONS_KEY } from '@/types/editActions';
+import type { EditActionsInterface, TextConfigKey } from '@/types';
+import { EDIT_ACTIONS_KEY } from '@/types';
 import ButtonGroup from './ButtonGroup.vue';
 
 const props = defineProps<{
-  configKey: string;
+  configKey: TextConfigKey;
   status: string;
 }>();
 
 const editActions = inject<EditActionsInterface>(EDIT_ACTIONS_KEY);
 const status = ref(props.status);
 
-const updateStatus = (configKey: string, payload: string) => {
+const updateStatus = (configKey: TextConfigKey, payload: string) => {
   editActions?.updateTextStatus(configKey, payload);
 };
 </script>

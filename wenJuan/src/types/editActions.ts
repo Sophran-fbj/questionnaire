@@ -14,10 +14,10 @@ export interface EditActionsInterface {
   updateCurrentIndex(configKey: OptionsConfigKey, index: number): void;
   
   // 图片操作（专门针对图片选项）
-  updatePicStatus(configKey: 'options', index: number, value: string): void;
-  updatePicTitle(configKey: 'options', index: number, value: string): void;
-  updatePicDesc(configKey: 'options', index: number, value: string): void;
-  deletePicImage(configKey: 'options', index: number): void;
+  updatePicStatus(configKey: OptionsConfigKey, index: number, value: string): void;
+  updatePicTitle(configKey: OptionsConfigKey, index: number, value: string): void;
+  updatePicDesc(configKey: OptionsConfigKey, index: number, value: string): void;
+  deletePicImage(configKey: OptionsConfigKey, index: number): void;
 }
 
 // 注入的key
